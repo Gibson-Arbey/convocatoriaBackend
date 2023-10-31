@@ -13,9 +13,9 @@ public class UsuarioDTO {
     private Integer id;
 
     /**
-     * El ID del usuario.
+     * El codigo del usuario ufps.
      */
-    private Integer codigo;
+    private String codigo;
     /**
      * El correo electrónico del usuario.
      */

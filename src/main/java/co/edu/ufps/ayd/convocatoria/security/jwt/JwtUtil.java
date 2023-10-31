@@ -25,9 +25,10 @@ public class JwtUtil {
 
 
     // Generar token de acceso
-    public String generateAccesToken(String username){
+    public String generateAccesToken(String username, String rol){
         return Jwts.builder()
                 .setSubject(username)
+                .claim("rol", rol)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(timeExpiration)))
                 .signWith(getSignatureKey(), SignatureAlgorithm.HS256)

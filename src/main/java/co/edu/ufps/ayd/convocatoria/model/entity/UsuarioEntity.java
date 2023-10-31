@@ -30,7 +30,7 @@ public class UsuarioEntity {
     private Integer id;
 
     @Column(nullable = false)
-    private Integer codigo;
+    private String codigo;
 
     @Column(nullable = false, length = 255)
     @NotEmpty

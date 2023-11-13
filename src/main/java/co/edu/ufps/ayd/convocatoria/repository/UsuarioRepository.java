@@ -11,4 +11,6 @@ import co.edu.ufps.ayd.convocatoria.model.entity.UsuarioEntity;
 public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer> {
     
     Optional<UsuarioEntity> findByEmail(String email);
+
+    Optional<UsuarioEntity> findBycodigo(String codigo);
 }

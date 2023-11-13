@@ -11,7 +11,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import co.edu.ufps.ayd.convocatoria.exception.CodigoExistsException;
+import co.edu.ufps.ayd.convocatoria.exception.CodigoInvalidoException;
 import co.edu.ufps.ayd.convocatoria.exception.EmailExistsException;
+import co.edu.ufps.ayd.convocatoria.exception.EmailInvalidoException;
 import co.edu.ufps.ayd.convocatoria.model.entity.UsuarioEntity;
 import co.edu.ufps.ayd.convocatoria.repository.RolRepository;
 import co.edu.ufps.ayd.convocatoria.repository.UsuarioRepository;
@@ -47,12 +50,25 @@ public class UsuarioService implements UsuarioInterface{
             throw new EmailExistsException("El correo electronico ya existe");
         }
 
+        if (usuarioRepository.findBycodigo(usuarioEntity.getCodigo()).isPresent()) {
+            throw new CodigoExistsException("El codigo ya esta registrado");
+        }
+
+        if(usuarioEntity.getCodigo().length() != 5 && usuarioEntity.getCodigo().length() != 7){
+            throw new CodigoInvalidoException("El codigo no es valido");
+        }
+
+        if (!usuarioEntity.getEmail().toLowerCase().endsWith("@ufps.edu.co")) {
+            throw new EmailInvalidoException("El correo electrónico debe terminar en @ufps.edu.co");
+        }
+        
         try {
+
             usuarioEntity.setEstado(true);
             usuarioEntity.setRol(rolRepository.findByNombre(rolNombre));
             usuarioRepository.save(usuarioEntity);
         } catch (Exception e) {
-            throw new RuntimeException("Error al guardar al usuario:" + e);
+            throw new RuntimeException("Error al guardar al usuario:" + e.getMessage(), e);
         }
     }
 }

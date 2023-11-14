@@ -15,7 +15,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
+/* *
+ * Clase de entidad que representa la tabla "usuario" en la base de datos.
+ */
 @Getter
 @Setter
 @AllArgsConstructor
@@ -25,24 +27,43 @@ import lombok.Setter;
                                     @Index(columnList = "codigo", name = "index_codigo", unique = true) })
 public class UsuarioEntity {
     
+    /* *
+     * Id del usuario
+     */
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Integer id;
 
-    @Column(nullable = false)
+    /* *
+     * Codigo del usuario asociado a la UFPS
+     */
+    @Column(nullable = false, length = 10)
+    @NotEmpty
     private String codigo;
 
+    /* *
+     * Email del usuario
+     */
     @Column(nullable = false, length = 255)
     @NotEmpty
     private String email;
 
+    /* *
+     * contraseña encriptada del usuario
+     */
     @Column(nullable = false, length = 255)
     @NotEmpty
     private String contrasenia;
 
+    /* *
+     * Estado del usuario
+     */
     @Column(nullable = false)
     private Boolean estado;
 
+    /* *
+     * Rol del usuario
+     */
     @ManyToOne
     @JoinColumn(name = "rol_id", nullable = false)
     private RolEntity rol;

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import co.edu.ufps.ayd.convocatoria.exception.CodigoExistsException;
 import co.edu.ufps.ayd.convocatoria.exception.CodigoInvalidoException;
 import co.edu.ufps.ayd.convocatoria.exception.ContraseniaInvalidException;
+import co.edu.ufps.ayd.convocatoria.exception.ConvocatoriaException;
 import co.edu.ufps.ayd.convocatoria.exception.EmailExistsException;
 import co.edu.ufps.ayd.convocatoria.exception.EmailInvalidoException;
 
@@ -43,5 +44,11 @@ public class RestExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     public ResponseEntity<String> handleContraseniaInvalidException(ContraseniaInvalidException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body("La contraseña debe tener minimo 8 caracteres.");
+    }
+
+    @ExceptionHandler(value = {ConvocatoriaException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<String> handleConvocatoriaException(ConvocatoriaException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 }

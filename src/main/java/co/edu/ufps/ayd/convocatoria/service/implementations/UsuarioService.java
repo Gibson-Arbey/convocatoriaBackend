@@ -70,8 +70,6 @@ public class UsuarioService implements UsuarioInterface{
         if(usuarioEntity.getContrasenia().length() < 8){
             throw new ContraseniaInvalidException("La contraseña debe tener minimo 8 caracteres");
         }
-
-        
         
         try {
 

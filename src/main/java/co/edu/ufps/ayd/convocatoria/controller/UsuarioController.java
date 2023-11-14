@@ -1,13 +1,16 @@
 package co.edu.ufps.ayd.convocatoria.controller;
 
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.edu.ufps.ayd.convocatoria.model.dto.UsuarioDTO;
@@ -50,6 +53,20 @@ public class UsuarioController {
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             throw e;
+        }
+    }
+
+    @PostMapping("/reestablecerContrasenia")
+    public ResponseEntity<String> reestablecerContrasenia(@RequestParam String email) {
+        try {
+            String nuevaContrasenia = usuarioService.generarcontrasenia(8);
+            String contraseniaEncriptada = passwordEncoder.encode(nuevaContrasenia);
+            usuarioService.reestablecerContrasenia(email, nuevaContrasenia, contraseniaEncriptada);
+            return ResponseEntity.ok().body("Correo enviado exitosamente");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body("Error al reestablecer la contraseña: " + e.getMessage());
         }
     }
 

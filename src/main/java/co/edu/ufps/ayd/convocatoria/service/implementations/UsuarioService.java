@@ -1,5 +1,6 @@
 package co.edu.ufps.ayd.convocatoria.service.implementations;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import co.edu.ufps.ayd.convocatoria.exception.CodigoExistsException;
 import co.edu.ufps.ayd.convocatoria.exception.CodigoInvalidoException;
+import co.edu.ufps.ayd.convocatoria.exception.ContraseniaInvalidException;
 import co.edu.ufps.ayd.convocatoria.exception.EmailExistsException;
 import co.edu.ufps.ayd.convocatoria.exception.EmailInvalidoException;
 import co.edu.ufps.ayd.convocatoria.model.entity.UsuarioEntity;
@@ -28,6 +30,9 @@ public class UsuarioService implements UsuarioInterface{
 
     @Autowired
     private  RolRepository rolRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -61,6 +66,12 @@ public class UsuarioService implements UsuarioInterface{
         if (!usuarioEntity.getEmail().toLowerCase().endsWith("@ufps.edu.co")) {
             throw new EmailInvalidoException("El correo electrónico debe terminar en @ufps.edu.co");
         }
+
+        if(usuarioEntity.getContrasenia().length() < 8){
+            throw new ContraseniaInvalidException("La contraseña debe tener minimo 8 caracteres");
+        }
+
+        
         
         try {
 
@@ -70,5 +81,27 @@ public class UsuarioService implements UsuarioInterface{
         } catch (Exception e) {
             throw new RuntimeException("Error al guardar al usuario:" + e.getMessage(), e);
         }
+    }
+
+    @Override
+    public void reestablecerContrasenia(String email, String contrasenia, String contraseniaEncriptada) {
+            UsuarioEntity usuarioEntity = usuarioRepository.findByEmail(email).get();
+            usuarioEntity.setContrasenia(contraseniaEncriptada);
+            usuarioRepository.save(usuarioEntity);
+            emailService.enviarEmail(email, contrasenia); 
+    }
+
+    public String generarcontrasenia(int length) {
+        String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder password = new StringBuilder();
+        SecureRandom random = new SecureRandom();
+
+        for (int i = 0; i < length; i++) {
+            int randomIndex = random.nextInt(CHARACTERS.length());
+            char randomChar = CHARACTERS.charAt(randomIndex);
+            password.append(randomChar);
+        }
+
+        return password.toString();
     }
 }

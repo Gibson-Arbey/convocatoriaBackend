@@ -8,4 +8,6 @@ public interface UsuarioInterface extends UserDetailsService{
 
     public void guardarUsuario(UsuarioEntity usuarioEntity, String rolNombre);
 
+    public void reestablecerContrasenia(String email, String contrasenia, String contraseniaEncriptada);
+
 }

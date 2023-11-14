@@ -51,7 +51,8 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(config -> config.disable())
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/usuario/guardarEvaluador", "/usuario/guardarProponente").permitAll();
+                    auth.requestMatchers("/usuario/guardarEvaluador", "/usuario/guardarProponente", 
+                                        "/usuario/reestablecerContrasenia").permitAll();
                     auth.requestMatchers("/usuario/prueba").hasAuthority("ROL_PROPONENTE");
                     auth.requestMatchers("/usuario/prueba2").hasAuthority("ROL_EVALUADOR");
                     auth.anyRequest().authenticated();

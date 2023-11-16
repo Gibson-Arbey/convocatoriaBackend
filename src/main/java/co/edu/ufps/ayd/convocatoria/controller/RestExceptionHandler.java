@@ -12,6 +12,7 @@ import co.edu.ufps.ayd.convocatoria.exception.ContraseniaInvalidException;
 import co.edu.ufps.ayd.convocatoria.exception.ConvocatoriaException;
 import co.edu.ufps.ayd.convocatoria.exception.EmailExistsException;
 import co.edu.ufps.ayd.convocatoria.exception.EmailInvalidoException;
+import co.edu.ufps.ayd.convocatoria.exception.MateriaException;
 
 @RestControllerAdvice
 public class RestExceptionHandler {
@@ -49,6 +50,12 @@ public class RestExceptionHandler {
     @ExceptionHandler(value = {ConvocatoriaException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<String> handleConvocatoriaException(ConvocatoriaException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(value = {MateriaException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<String> handleMateriaException(MateriaException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 }

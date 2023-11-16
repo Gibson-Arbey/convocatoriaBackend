@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import co.edu.ufps.ayd.convocatoria.model.dto.UsuarioDTO;
 import co.edu.ufps.ayd.convocatoria.model.entity.UsuarioEntity;
 import co.edu.ufps.ayd.convocatoria.service.implementations.UsuarioService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/usuario")
+@Validated
 public class UsuarioController {
     
     @Autowired
@@ -27,7 +30,7 @@ public class UsuarioController {
     private  PasswordEncoder passwordEncoder;
 
     @PostMapping("/guardarEvaluador")
-    public ResponseEntity<String> guardarEvaluador(@RequestBody UsuarioDTO usuarioDTO) {
+    public ResponseEntity<String> guardarEvaluador(@Valid @RequestBody UsuarioDTO usuarioDTO) {
         try {
             UsuarioEntity usuarioEntity = new UsuarioEntity();
             BeanUtils.copyProperties(usuarioDTO, usuarioEntity);
@@ -42,7 +45,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/guardarProponente")
-    public ResponseEntity<String> guardarProponente(@RequestBody UsuarioDTO usuarioDTO) {
+    public ResponseEntity<String> guardarProponente(@Valid @RequestBody UsuarioDTO usuarioDTO) {
         try {
             UsuarioEntity usuarioEntity = new UsuarioEntity();
             BeanUtils.copyProperties(usuarioDTO, usuarioEntity);

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import co.edu.ufps.ayd.convocatoria.model.entity.ConvocatoriaEntity;
 import co.edu.ufps.ayd.convocatoria.service.implementations.ConvocatoriaService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/convocatoria")
+@Validated
 public class ConvocatoriaController {
     
     @Autowired
@@ -24,7 +27,7 @@ public class ConvocatoriaController {
 
     @PostMapping("/abrir")
     @PreAuthorize("hasAuthority('ROL_ADMIN')")
-    public ResponseEntity<String> abrirConvocatoria(@RequestBody ConvocatoriaEntity convocatoriaEntity) {
+    public ResponseEntity<String> abrirConvocatoria(@Valid @RequestBody ConvocatoriaEntity convocatoriaEntity) {
         try {
             convocatoriaService.abrirConvocatoria(convocatoriaEntity);
             return ResponseEntity.ok().body("La convocatoria se abrio correctamente");  
@@ -57,7 +60,7 @@ public class ConvocatoriaController {
 
     @PutMapping("/modificar")
     @PreAuthorize("hasAuthority('ROL_ADMIN')")
-    public ResponseEntity<String> modificarConvocatoria(@RequestBody ConvocatoriaEntity convocatoriaModificada){
+    public ResponseEntity<String> modificarConvocatoria(@Valid @RequestBody ConvocatoriaEntity convocatoriaModificada){
         try {
             convocatoriaService.modificarConvocatoria(convocatoriaModificada);
             return ResponseEntity.ok().body("Las fechas de la convocatoria se modificaron correctamente");

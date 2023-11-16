@@ -14,7 +14,7 @@ public interface MateriaRepository extends JpaRepository<MateriaEntity, Integer>
 
     List<MateriaEntity> findAllByEstado(Boolean estado);
 
-    Optional<MateriaEntity> findByCodigo(String codigo);
+    Optional<MateriaEntity> findByCodigoAndGrupo(String codigo, String grupo);
 
     @Query("SELECT m FROM MateriaEntity m WHERE m.nombre LIKE %:nombre%")
     List<MateriaEntity> findByNombreContaining(@Param("nombre") String nombre);

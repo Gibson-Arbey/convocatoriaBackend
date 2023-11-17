@@ -54,7 +54,7 @@ public class SemilleroService implements SemilleroInterface{
 
     @Override
     public void modificarSemillero(Integer id, SemilleroEntity semilleroEntity) {
-        Optional<SemilleroEntity> semilleroOptional = semilleroRepository.findByCodigo(semilleroEntity.getCodigo());
+        Optional<SemilleroEntity> semilleroOptional = semilleroRepository.findById(id);
         if(!semilleroOptional.isPresent()){
             throw new SemilleroException("No hay un semillero registrado con el codigo: " + semilleroEntity.getCodigo() );
         }

@@ -73,7 +73,7 @@ public class ProfesorController {
     public ResponseEntity<String> inhabilitarProfesor(@RequestParam("id") Integer id) {
         try {
             profesorService.inhabilitarProfesor(id);
-            return ResponseEntity.ok("Profesor (in)habilitada exitosamente");
+            return ResponseEntity.ok("Profesor (in)habilitado exitosamente");
         } catch (Exception e) {
             throw e;
         }

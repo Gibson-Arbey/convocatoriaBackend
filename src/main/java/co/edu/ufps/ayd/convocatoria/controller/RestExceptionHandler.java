@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import co.edu.ufps.ayd.convocatoria.exception.CodigoExistsException;
 import co.edu.ufps.ayd.convocatoria.exception.CodigoInvalidoException;
@@ -72,4 +73,9 @@ public class RestExceptionHandler {
     public ResponseEntity<String> handleSemilleroException(SemilleroException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+	public ResponseEntity<String> handleMaxSizeException(MaxUploadSizeExceededException ex) {
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Verifica el tamaño del archivo");
+	}
 }

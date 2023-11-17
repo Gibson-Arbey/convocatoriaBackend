@@ -72,7 +72,7 @@ public class SemilleroController {
     public ResponseEntity<String> inhabilitarSemillero(@RequestParam("id") Integer id) {
         try {
             semilleroService.inhabilitarSemillero(id);
-            return ResponseEntity.ok("Semillero (in)habilitada exitosamente");
+            return ResponseEntity.ok("Semillero (in)habilitado exitosamente");
         } catch (Exception e) {
             throw e;
         }

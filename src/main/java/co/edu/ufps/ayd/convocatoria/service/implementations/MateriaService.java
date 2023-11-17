@@ -27,6 +27,15 @@ public class MateriaService implements MateriaInterface{
     }
 
     @Override
+    public List<MateriaEntity> listarMateriasActivas() {
+        List<MateriaEntity> materiaEntity =  materiaRepository.findAllByEstado(true);
+        if(materiaEntity.isEmpty()){
+            throw new MateriaException("No hay materias activas");
+        }
+        return materiaEntity;
+    }
+
+    @Override
     public MateriaEntity buscarMateria(Integer id) {
         Optional<MateriaEntity> materiaEntity =  materiaRepository.findById(id);
         if(!materiaEntity.isPresent()){
@@ -49,7 +58,7 @@ public class MateriaService implements MateriaInterface{
     public void modificarMateria(Integer id, MateriaEntity materiaEntity) {
         Optional<MateriaEntity> materiaOptional = materiaRepository.findById(id);
         if(!materiaOptional.isPresent()){
-            throw new MateriaException("No hay una materia registrada");
+            throw new MateriaException("No hay una materia registrada con el id" + id);
         }
         MateriaEntity materiaActualizada = materiaOptional.get();
         materiaActualizada.setCodigo(materiaEntity.getCodigo());
@@ -62,20 +71,11 @@ public class MateriaService implements MateriaInterface{
     public void inhabilitarMateria(Integer id) {
         Optional<MateriaEntity> materiaOptional = materiaRepository.findById(id);
         if(!materiaOptional.isPresent()){
-            throw new MateriaException("No hay una materia registrada  con el id" + id);
+            throw new MateriaException("No hay una materia registrada con el id" + id);
         }
         MateriaEntity materiaEntity = materiaOptional.get();
         materiaEntity.setEstado(!materiaEntity.getEstado());
         materiaRepository.save(materiaEntity);
-    }
-
-    @Override
-    public List<MateriaEntity> listarMateriasActivas() {
-        List<MateriaEntity> materiaEntity =  materiaRepository.findAllByEstado(true);
-        if(materiaEntity.isEmpty()){
-            throw new MateriaException("No hay materias activas");
-        }
-        return materiaEntity;
     }
     
 }

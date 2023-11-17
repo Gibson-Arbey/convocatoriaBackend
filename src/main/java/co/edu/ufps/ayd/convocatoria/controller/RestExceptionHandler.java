@@ -14,6 +14,7 @@ import co.edu.ufps.ayd.convocatoria.exception.EmailExistsException;
 import co.edu.ufps.ayd.convocatoria.exception.EmailInvalidoException;
 import co.edu.ufps.ayd.convocatoria.exception.MateriaException;
 import co.edu.ufps.ayd.convocatoria.exception.ProfesorException;
+import co.edu.ufps.ayd.convocatoria.exception.SemilleroException;
 
 @RestControllerAdvice
 public class RestExceptionHandler {
@@ -63,6 +64,12 @@ public class RestExceptionHandler {
     @ExceptionHandler(value = {ProfesorException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<String> handleProfesorException(ProfesorException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(value = {SemilleroException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<String> handleSemilleroException(SemilleroException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 }

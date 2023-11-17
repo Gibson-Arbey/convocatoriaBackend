@@ -14,33 +14,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import co.edu.ufps.ayd.convocatoria.model.entity.ProfesorEntity;
-import co.edu.ufps.ayd.convocatoria.service.implementations.ProfesorService;
+import co.edu.ufps.ayd.convocatoria.model.entity.SemilleroEntity;
+import co.edu.ufps.ayd.convocatoria.service.implementations.SemilleroService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/profesor")
+@RequestMapping("/semillero")
 @Validated
-public class ProfesorController {
-
+public class SemilleroController {
+    
     @Autowired
-    ProfesorService profesorService;
+    SemilleroService semilleroService;
 
     @GetMapping("/listar")
     @PreAuthorize("hasAuthority('ROL_ADMIN')")
-    public List<ProfesorEntity> listarProfesoresRegistrados(){
+    public List<SemilleroEntity> listarSemillerosRegistrados(){
         try {
-            return profesorService.listarProfesores();
+            return semilleroService.listarSemilleros();
         } catch (Exception e) {
             throw e;
         }
     }
-
     @GetMapping("/listarActivos")
     @PreAuthorize("hasAuthority('ROL_ADMIN') or hasAuthority('ROL_PROPONENTE')")
-    public List<ProfesorEntity> listarProfesoresActivos(){
+    public List<SemilleroEntity> listarSemillerosActivos(){
         try {
-            return profesorService.listarProfesoresActivos();
+            return semilleroService.listarSemillerosActivos();
         } catch (Exception e) {
             throw e;
         }
@@ -48,10 +47,10 @@ public class ProfesorController {
 
     @PostMapping("/agregar")
     @PreAuthorize("hasAuthority('ROL_ADMIN')")
-    public ResponseEntity<String> agregarPrfoesor(@Valid @RequestBody ProfesorEntity profesorEntity){
+    public ResponseEntity<String> agregarSemillero(@Valid @RequestBody SemilleroEntity semilleroEntity){
         try {
-            profesorService.agregarProfesor(profesorEntity);
-            return ResponseEntity.ok("Profesor guardado exitosamente");
+            semilleroService.agregarSemillero(semilleroEntity);
+            return ResponseEntity.ok("Semillero guardado exitosamente");
         } catch (Exception e) {
             throw e;
         }
@@ -59,10 +58,10 @@ public class ProfesorController {
 
     @PutMapping("/modificar")
     @PreAuthorize("hasAuthority('ROL_ADMIN')")
-    public ResponseEntity<String> modificarProfesor(@RequestParam("id") Integer id, @Valid @RequestBody ProfesorEntity profesorEntity){
+    public ResponseEntity<String> modificarSemillero(@RequestParam("id") Integer id, @Valid @RequestBody SemilleroEntity semilleroEntity){
         try {
-            profesorService.modificarProfesor(id, profesorEntity);
-            return ResponseEntity.ok("Profesor modificado exitosamente");
+            semilleroService.modificarSemillero(id, semilleroEntity);
+            return ResponseEntity.ok("Semillero modificado exitosamente");
         } catch (Exception e) {
             throw e;
         }
@@ -70,10 +69,10 @@ public class ProfesorController {
 
     @GetMapping("/inhabilitar")
     @PreAuthorize("hasAuthority('ROL_ADMIN')")
-    public ResponseEntity<String> inhabilitarProfesor(@RequestParam("id") Integer id) {
+    public ResponseEntity<String> inhabilitarSemillero(@RequestParam("id") Integer id) {
         try {
-            profesorService.inhabilitarProfesor(id);
-            return ResponseEntity.ok("Profesor (in)habilitada exitosamente");
+            semilleroService.inhabilitarSemillero(id);
+            return ResponseEntity.ok("Semillero (in)habilitada exitosamente");
         } catch (Exception e) {
             throw e;
         }

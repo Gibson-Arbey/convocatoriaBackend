@@ -57,7 +57,7 @@ public class ProfesorService  implements ProfesorInterface{
     public void modificarProfesor(Integer id, ProfesorEntity profesorEntity) {
         Optional<ProfesorEntity> profesorOptional = profesorRepository.findById(id);
         if(!profesorOptional.isPresent()){
-            throw new ProfesorException("No hay un profesor registrado con el id" + id);
+            throw new ProfesorException("Ya hay un profesor registrado con el codigo: " + profesorEntity.getCodigo() );
         }
         ProfesorEntity profeosrActualizado = profesorOptional.get();
         profeosrActualizado.setCodigo(profesorEntity.getCodigo());

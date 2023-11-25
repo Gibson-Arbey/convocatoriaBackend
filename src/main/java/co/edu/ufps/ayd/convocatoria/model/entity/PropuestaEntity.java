@@ -39,7 +39,7 @@ public class PropuestaEntity {
     private UsuarioEntity usuario;
 
     /* *
-     * Usuario que registro la propuesta
+     * Convocatoria en la que se registro la propuesta
      */
     @ManyToOne
     @JoinColumn(name = "convocatoria_id", nullable = false)

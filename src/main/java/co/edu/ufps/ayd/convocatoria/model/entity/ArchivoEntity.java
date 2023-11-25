@@ -50,3 +50,4 @@ public class ArchivoEntity {
     @OneToMany(mappedBy = "archivo")
     private List<PropuestaEntity> propuestas;
 }
+

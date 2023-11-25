@@ -24,7 +24,6 @@ import lombok.Setter;
 @Entity
 @Table(name = "propuesta")
 public class PropuestaEntity {
-    
     /* *
      * Id de la propuesta
      */
@@ -40,9 +39,10 @@ public class PropuestaEntity {
     private UsuarioEntity usuario;
 
     /* *
-     * Convocatoria en la que se registro la propuesta
+     * Usuario que registro la propuesta
      */
-    @Column(name = "convocatoria_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "convocatoria_id", nullable = false)
     private ConvocatoriaEntity convocatoria;
 
     /* *
@@ -91,11 +91,4 @@ public class PropuestaEntity {
     @ManyToOne
     @JoinColumn(name = "profesor_id")
     private ProfesorEntity profesor;
-
-    /* *
-     * Archivo de la propuesta
-     */
-    @ManyToOne
-    @JoinColumn(name = "archivo_id")
-    private ArchivoEntity archivo;
 }

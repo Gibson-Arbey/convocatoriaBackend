@@ -17,8 +17,9 @@ public class ArchivoService implements ArchivoInterface {
 
     private final Path ruta = Paths.get("archivos");
     @Override
-    public void guardar(MultipartFile archivo) throws Exception {
+    public String guardar(MultipartFile archivo) throws Exception {
         Files.copy(archivo.getInputStream(), this.ruta.resolve(archivo.getOriginalFilename()));
+        return archivo.getOriginalFilename();
     }
 
     @Override

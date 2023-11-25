@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface ArchivoInterface {
 
-    public void guardar(MultipartFile archivo) throws Exception;
+    public String guardar(MultipartFile archivo) throws Exception;
 
     public Resource obtenerArchivo(String nombre) throws Exception; 
 

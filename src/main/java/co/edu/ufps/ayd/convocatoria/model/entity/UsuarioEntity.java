@@ -1,5 +1,7 @@
 package co.edu.ufps.ayd.convocatoria.model.entity;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -68,9 +71,15 @@ public class UsuarioEntity {
     @JoinColumn(name = "rol_id", nullable = false)
     private RolEntity rol;
 
-    @Override
-    public String toString() {
-        return "UsuarioEntity [id=" + id + ", codigo=" + codigo + ", email=" + email + ", contrasenia=" + contrasenia
-                + ", estado=" + estado + ", rol=" + rol + "]";
-    }
+    /* *
+     * Mapeo de las propuestas registradas del usuario
+     */
+    @OneToMany(mappedBy = "usuario")
+    private List<PropuestaEntity> propuestasRegistradas;
+
+    /* *
+     * Mapeo de las propuestas asignadas del usuario
+     */
+    @OneToMany(mappedBy = "evaluador")
+    private List<PropuestaEntity> propuestasAsignadas;
 }

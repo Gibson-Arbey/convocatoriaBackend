@@ -1,13 +1,10 @@
 package co.edu.ufps.ayd.convocatoria.model.entity;
 
-import java.util.List;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -15,54 +12,50 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/* *
- * Clase de entidad que representa la tabla "materia" en la base de datos.
+/**
+ * Clase de entidad que representa la tabla "proponente" en la base de datos.
  */
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "materia")
-public class MateriaEntity {
+@Table(name = "proponente")
+public class ProponenteEntity {
     
     /* *
-     * Id de la materia asociada a la ufps
+     * Id del proponente
      */
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Integer id;
 
     /* *
-     * Codigo de la materia asociada a la UFPS
+     * Codigo del estudiante asociado a la UFPS
      */
     @Column(nullable = false, length = 10)
     @NotEmpty
     private String codigo;
 
     /* *
-     * Nombre de la materia asociada a la UFPS
+     * Nombre del estudiante de la UFPS
      */
     @Column(nullable = false, length = 50)
     @NotEmpty
     private String nombre;
 
     /* *
-     * Grupo de la materia asociada a la UFPS
+     * Cedula del estudiante de la UFPS
      */
-    @Column(nullable = false, length = 1)
+    @Column(nullable = false, length = 15)
     @NotEmpty
-    private String grupo;
+    private String cedula;
 
     /* *
-     * Estado de la materia asociada a la UFPS
+     * Semestre del estudiante de la UFPS
      */
-    @Column(nullable = false)
-    private Boolean estado;
+    @Column(nullable = false, length = 3)
+    @NotEmpty
+    private String semestre;
 
-    /* *
-     * Mapeo de las materias registradas en propuestas
-     */
-    @OneToMany(mappedBy = "materia")
-    private List<PropuestaEntity> propuestas;
 }

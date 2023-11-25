@@ -1,12 +1,14 @@
 package co.edu.ufps.ayd.convocatoria.model.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -65,4 +67,9 @@ public class ConvocatoriaEntity {
     @Column(nullable = false)
     private Boolean estado;
 
+    /* *
+     * Mapeo de las propuestas registradas en la convocatoria
+     */
+    @OneToMany(mappedBy = "convocatoria")
+    private List<PropuestaEntity> propuestas;
 }

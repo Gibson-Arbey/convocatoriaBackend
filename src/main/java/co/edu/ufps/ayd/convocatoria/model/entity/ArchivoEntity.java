@@ -1,10 +1,13 @@
 package co.edu.ufps.ayd.convocatoria.model.entity;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,4 +43,10 @@ public class ArchivoEntity {
      */
     @Column(nullable = false)
     private String url;
+
+    /* *
+     * Mapeo de las archivos registrados en propuestas
+     */
+    @OneToMany(mappedBy = "archivo")
+    private List<PropuestaEntity> propuestas;
 }

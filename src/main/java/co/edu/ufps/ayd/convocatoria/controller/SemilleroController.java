@@ -36,7 +36,7 @@ public class SemilleroController {
         }
     }
     @GetMapping("/listarActivos")
-    @PreAuthorize("hasAuthority('ROL_ADMIN') or hasAuthority('ROL_PROPONENTE')")
+    @PreAuthorize("hasAnyAuthority('ROL_ADMIN', 'ROL_PROPONENTE')")
     public List<SemilleroEntity> listarSemillerosActivos(){
         try {
             return semilleroService.listarSemillerosActivos();

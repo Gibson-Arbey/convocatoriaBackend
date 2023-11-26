@@ -3,6 +3,8 @@ package co.edu.ufps.ayd.convocatoria.model.entity;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -71,5 +73,6 @@ public class ConvocatoriaEntity {
      * Mapeo de las propuestas registradas en la convocatoria
      */
     @OneToMany(mappedBy = "convocatoria")
+    @JsonIgnore
     private List<PropuestaEntity> propuestas;
 }

@@ -2,6 +2,8 @@ package co.edu.ufps.ayd.convocatoria.model.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -75,11 +77,13 @@ public class UsuarioEntity {
      * Mapeo de las propuestas registradas del usuario
      */
     @OneToMany(mappedBy = "usuario")
+    @JsonIgnore
     private List<PropuestaEntity> propuestasRegistradas;
 
     /* *
      * Mapeo de las propuestas asignadas del usuario
      */
     @OneToMany(mappedBy = "evaluador")
+    @JsonIgnore
     private List<PropuestaEntity> propuestasAsignadas;
 }

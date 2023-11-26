@@ -91,4 +91,16 @@ public class PropuestaEntity {
     @ManyToOne
     @JoinColumn(name = "profesor_id")
     private ProfesorEntity profesor;
+
+    @Column(nullable = false)
+    private String archivo;
+
+    @Override
+    public String toString() {
+        return "PropuestaEntity [id=" + id + ", usuario=" + usuario + ", convocatoria=" + convocatoria + ", nombre="
+                + nombre + ", evaluador=" + evaluador + ", puntaje=" + puntaje + ", tipo=" + tipo + ", materia="
+                + materia + ", semillero=" + semillero + ", profesor=" + profesor + "]";
+    }
+
+    
 }

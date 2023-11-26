@@ -3,6 +3,7 @@ package co.edu.ufps.ayd.convocatoria.service.implementations;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,6 +18,8 @@ import co.edu.ufps.ayd.convocatoria.exception.CodigoInvalidoException;
 import co.edu.ufps.ayd.convocatoria.exception.ContraseniaInvalidException;
 import co.edu.ufps.ayd.convocatoria.exception.EmailExistsException;
 import co.edu.ufps.ayd.convocatoria.exception.EmailInvalidoException;
+import co.edu.ufps.ayd.convocatoria.exception.UsuarioException;
+import co.edu.ufps.ayd.convocatoria.model.entity.RolEntity;
 import co.edu.ufps.ayd.convocatoria.model.entity.UsuarioEntity;
 import co.edu.ufps.ayd.convocatoria.repository.RolRepository;
 import co.edu.ufps.ayd.convocatoria.repository.UsuarioRepository;
@@ -101,5 +104,26 @@ public class UsuarioService implements UsuarioInterface{
         }
 
         return password.toString();
+    }
+
+    public UsuarioEntity buscarUsuarioEmail(String email) {
+        return usuarioRepository.findByEmail(email).get();
+    }
+
+    @Override
+    public Optional<List<UsuarioEntity>> listarEvaluadores() {
+        List<UsuarioEntity> evaluadores = usuarioRepository.findByRol(new RolEntity(2, "ROL_EVALUADOR"));
+        return Optional.ofNullable(evaluadores.isEmpty() ? null : evaluadores);
+    }
+
+    @Override
+    public void inhabilitarEvaluador(Integer id) {
+        Optional<UsuarioEntity> usuarioOptional = usuarioRepository.findById(id);
+        if(!usuarioOptional.isPresent()){
+            throw new UsuarioException("No hay un evaluador registrado con el id" + id);
+        }
+        UsuarioEntity evaluador = usuarioOptional.get();
+        evaluador.setEstado(!evaluador.getEstado());
+        usuarioRepository.save(evaluador);
     }
 }

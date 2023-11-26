@@ -37,7 +37,7 @@ public class ProfesorController {
     }
 
     @GetMapping("/listarActivos")
-    @PreAuthorize("hasAuthority('ROL_ADMIN') or hasAuthority('ROL_PROPONENTE')")
+    @PreAuthorize("hasAnyAuthority('ROL_ADMIN', 'ROL_PROPONENTE')")
     public List<ProfesorEntity> listarProfesoresActivos(){
         try {
             return profesorService.listarProfesoresActivos();

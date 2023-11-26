@@ -2,6 +2,8 @@ package co.edu.ufps.ayd.convocatoria.model.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -63,6 +65,7 @@ public class MateriaEntity {
     /* *
      * Mapeo de las materias registradas en propuestas
      */
+    @JsonIgnore
     @OneToMany(mappedBy = "materia")
     private List<PropuestaEntity> propuestas;
 }

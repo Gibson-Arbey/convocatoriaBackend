@@ -43,4 +43,11 @@ public class ProponentePropuestaEntity {
     @ManyToOne
     @JoinColumn(name = "propuesta_id", nullable = false)
     private PropuestaEntity propuesta;
+
+    public ProponentePropuestaEntity(PropuestaEntity propuesta, ProponenteEntity proponente) {
+        this.proponente = proponente;
+        this.propuesta = propuesta;
+    }
+
+
 }

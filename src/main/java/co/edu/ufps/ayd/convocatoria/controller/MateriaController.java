@@ -37,7 +37,7 @@ public class MateriaController {
     }
 
     @GetMapping("/listarActivas")
-    @PreAuthorize("hasAuthority('ROL_ADMIN') or hasAuthority('ROL_PROPONENTE')")
+    @PreAuthorize("hasAnyAuthority('ROL_ADMIN', 'ROL_PROPONENTE')")
     public List<MateriaEntity> listarMateriasActivas(){
         try {
             return materiaService.listarMateriasActivas();

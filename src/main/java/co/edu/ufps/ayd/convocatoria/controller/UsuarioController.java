@@ -1,18 +1,23 @@
 package co.edu.ufps.ayd.convocatoria.controller;
 
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import co.edu.ufps.ayd.convocatoria.exception.UsuarioException;
 import co.edu.ufps.ayd.convocatoria.model.dto.UsuarioDTO;
 import co.edu.ufps.ayd.convocatoria.model.entity.UsuarioEntity;
 import co.edu.ufps.ayd.convocatoria.service.implementations.UsuarioService;
@@ -22,12 +27,12 @@ import jakarta.validation.Valid;
 @RequestMapping("/usuario")
 @Validated
 public class UsuarioController {
-    
+
     @Autowired
     private UsuarioService usuarioService;
 
     @Autowired
-    private  PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @PostMapping("/guardarEvaluador")
     public ResponseEntity<String> guardarEvaluador(@Valid @RequestBody UsuarioDTO usuarioDTO) {
@@ -68,7 +73,26 @@ public class UsuarioController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body("Error al reestablecer la contraseña: " + e.getMessage());
+                    .body("Error al reestablecer la contraseña: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/listarEvaluadores")
+    @PreAuthorize("hasAuthority('ROL_ADMIN')")
+    public List<UsuarioEntity> listarEvaluadores() {
+        Optional<List<UsuarioEntity>> evaluadoresOptional = usuarioService.listarEvaluadores();
+
+        return evaluadoresOptional.orElseThrow(() -> new UsuarioException("No hay evaluadores registrados"));
+    }
+
+    @GetMapping("/inhabilitarEvaluador")
+    @PreAuthorize("hasAuthority('ROL_ADMIN')")
+    public ResponseEntity<String> inhabilitarEvaluador(@RequestParam("id") Integer id) {
+        try {
+            usuarioService.inhabilitarEvaluador(id);
+            return ResponseEntity.ok("Evaluador (in)habilitado exitosamente");
+        } catch (Exception e) {
+            throw e;
         }
     }
 

@@ -52,8 +52,10 @@ public class SecurityConfig {
                 .csrf(config -> config.disable())
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/usuario/guardarEvaluador", "/usuario/guardarProponente", "/usuario/reestablecerContrasenia").permitAll();
-                    auth.requestMatchers("/convocatoria/*", "/materia/*", "/profesor/*", "/semillero/*").hasAuthority("ROL_ADMIN");
-                    auth.requestMatchers("/materia/listarActivas", "/profesor/listarActivos", "/semillero/listarActivos", "/propuesta/guardarArchivo").hasAuthority("ROL_PROPONENTE");
+                    auth.requestMatchers("/convocatoria/**", "/materia/**", "/profesor/**", "/semillero/**", "/propuesta/**", "/usuario/listarEvaluadores",
+                                            "/usuario/inhabilitarEvaluador", "/propuesta/asignarEvaluador").hasAnyAuthority("ROL_ADMIN", "ROL_PROPONENTE");
+                    auth.requestMatchers("/materia/listarActivas", "/profesor/listarActivos", "/semillero/listarActivos", "/propuesta/guardarArchivo"
+                                            ,"/propuesta/registrar", "/propuesta/buscarRegistradas").hasAuthority("ROL_PROPONENTE");
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> {

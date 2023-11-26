@@ -15,7 +15,9 @@ import co.edu.ufps.ayd.convocatoria.exception.EmailExistsException;
 import co.edu.ufps.ayd.convocatoria.exception.EmailInvalidoException;
 import co.edu.ufps.ayd.convocatoria.exception.MateriaException;
 import co.edu.ufps.ayd.convocatoria.exception.ProfesorException;
+import co.edu.ufps.ayd.convocatoria.exception.PropuestaException;
 import co.edu.ufps.ayd.convocatoria.exception.SemilleroException;
+import co.edu.ufps.ayd.convocatoria.exception.UsuarioException;
 
 @RestControllerAdvice
 public class RestExceptionHandler {
@@ -78,4 +80,16 @@ public class RestExceptionHandler {
 	public ResponseEntity<String> handleMaxSizeException(MaxUploadSizeExceededException ex) {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Verifica el tamaño del archivo");
 	}
+
+    @ExceptionHandler(value = {PropuestaException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<String> handlePropuestaException(PropuestaException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(value = {UsuarioException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<String> handleUsuarioException(UsuarioException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
 }

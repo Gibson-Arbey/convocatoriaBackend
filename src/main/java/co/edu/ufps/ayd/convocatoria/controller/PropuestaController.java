@@ -16,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 
+import co.edu.ufps.ayd.convocatoria.model.dto.PropuestaDTO;
 import co.edu.ufps.ayd.convocatoria.model.entity.ConvocatoriaEntity;
 import co.edu.ufps.ayd.convocatoria.model.entity.ProponenteEntity;
 import co.edu.ufps.ayd.convocatoria.model.entity.PropuestaEntity;
@@ -124,6 +126,49 @@ public class PropuestaController {
     public ResponseEntity<String> asignarEvaluador(@RequestParam("idPropuesta") Integer idPropuesta, @RequestParam("idEvaluador") Integer idEvaluador){
         propuestaService.asignarEvaluador(idPropuesta, idEvaluador);
         return ResponseEntity.ok("Evaluador asignado exitosamente");
+    }
+
+    @GetMapping("/calificarPropuestaAsignada")
+    @PreAuthorize("hasAnyAuthority('ROL_ADMIN', 'ROL_EVALUADOR')")
+    public ResponseEntity<String> calificarPropuestaAsignada(@RequestParam("idPropuesta") Integer idPropuesta, @RequestParam("puntaje") Integer puntaje) {
+        try {
+            propuestaService.calificarPropuestaAsignada(idPropuesta, puntaje);
+            return ResponseEntity.ok().body("Puntaje guardado exitosamente");
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @GetMapping("/calificarPropuestaAdmin")
+    @PreAuthorize("hasAuthority('ROL_ADMIN')")
+    public ResponseEntity<String> calificarPropuestaAdmin(@RequestParam("idPropuesta") Integer idPropuesta, @RequestParam("puntaje") Integer puntaje) {
+        try {
+            propuestaService.calificarPropuestaAdmin(idPropuesta, puntaje);
+            return ResponseEntity.ok().body("Puntaje guardado exitosamente");
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @GetMapping("/listarAgrupadasPorTipo")
+    @PreAuthorize("hasAuthority('ROL_ADMIN')")
+    public ResponseEntity<List<PropuestaDTO>> listarPropuestasAgrupadasPorTipo() {
+        List<PropuestaDTO> propuestasAgrupadas = propuestaService.listarPropuestasAgrupadasPorTipo();
+        return new ResponseEntity<>(propuestasAgrupadas, HttpStatus.OK);
+    }
+
+    @GetMapping("/obteberPropuesta/{id}")
+    @PreAuthorize("hasAuthority('ROL_ADMIN')")
+    public ResponseEntity<PropuestaDTO> obtenerPropuestaPorId(@PathVariable Integer id) {
+        PropuestaDTO propuestaDTO = propuestaService.obtenerPropuestaPorId(id);
+        return ResponseEntity.ok(propuestaDTO);
+    }
+
+    @PutMapping("/modificarPropuesta/{id}")
+    @PreAuthorize("hasAuthority('ROL_ADMIN')")
+    public ResponseEntity<String> modificarPropuesta(@PathVariable Integer id, @RequestBody PropuestaDTO propuestaDTO) {
+        propuestaService.modificarPropuesta(id, propuestaDTO);
+        return ResponseEntity.ok().body("Propuesta modificada exitosamente");
     }
 
     private PropuestaEntity convertirAModeloPropuesta(Map<?, ?> datoMap) {

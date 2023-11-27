@@ -53,9 +53,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/usuario/guardarEvaluador", "/usuario/guardarProponente", "/usuario/reestablecerContrasenia").permitAll();
                     auth.requestMatchers("/convocatoria/**", "/materia/**", "/profesor/**", "/semillero/**", "/propuesta/**", "/usuario/listarEvaluadores",
-                                            "/usuario/inhabilitarEvaluador", "/propuesta/asignarEvaluador").hasAnyAuthority("ROL_ADMIN", "ROL_PROPONENTE");
+                                            "/usuario/inhabilitarEvaluador", "/propuesta/asignarEvaluador").hasAnyAuthority("ROL_ADMIN", "ROL_PROPONENTE", "ROL_EVALUADOR");
                     auth.requestMatchers("/materia/listarActivas", "/profesor/listarActivos", "/semillero/listarActivos", "/propuesta/guardarArchivo"
                                             ,"/propuesta/registrar", "/propuesta/buscarRegistradas").hasAuthority("ROL_PROPONENTE");
+                    auth.requestMatchers("/propuesta/calificarPropuestaAsignada").hasAuthority("ROL_EVALUADOR");
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> {

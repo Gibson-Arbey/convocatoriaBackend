@@ -3,8 +3,11 @@ package co.edu.ufps.ayd.convocatoria.repository;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import co.edu.ufps.ayd.convocatoria.model.entity.ConvocatoriaEntity;
 import co.edu.ufps.ayd.convocatoria.model.entity.PropuestaEntity;
 import co.edu.ufps.ayd.convocatoria.model.entity.UsuarioEntity;
 
@@ -17,4 +20,9 @@ public interface PropuestaRepository extends JpaRepository<PropuestaEntity, Inte
     Optional<PropuestaEntity> findByNombre(String nombre);
 
     List<PropuestaEntity> findByUsuario(UsuarioEntity usuario);
+
+    List<PropuestaEntity> findByConvocatoria(ConvocatoriaEntity convocatoria);
+
+    @Query("SELECT p FROM PropuestaEntity p LEFT JOIN FETCH p.proponentes WHERE p.id = :id")
+    Optional<PropuestaEntity> findByIdWithProponentes(@Param("id") Integer id);
 }

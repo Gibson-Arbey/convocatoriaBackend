@@ -23,6 +23,11 @@ public interface PropuestaRepository extends JpaRepository<PropuestaEntity, Inte
 
     List<PropuestaEntity> findByConvocatoria(ConvocatoriaEntity convocatoria);
 
+    List<PropuestaEntity> findByEvaluador(UsuarioEntity usuarioEntity);
+
     @Query("SELECT p FROM PropuestaEntity p LEFT JOIN FETCH p.proponentes WHERE p.id = :id")
     Optional<PropuestaEntity> findByIdWithProponentes(@Param("id") Integer id);
+
+    List<PropuestaEntity> findByConvocatoriaOrderByPuntajeDesc(ConvocatoriaEntity convocatoria);
+
 }

@@ -3,8 +3,10 @@ package co.edu.ufps.ayd.convocatoria.service.interfaces;
 import java.util.List;
 
 import co.edu.ufps.ayd.convocatoria.model.dto.PropuestaDTO;
+import co.edu.ufps.ayd.convocatoria.model.entity.ConvocatoriaEntity;
 import co.edu.ufps.ayd.convocatoria.model.entity.ProponenteEntity;
 import co.edu.ufps.ayd.convocatoria.model.entity.PropuestaEntity;
+import co.edu.ufps.ayd.convocatoria.model.entity.UsuarioEntity;
 
 public interface PropuestaInterface {
 
@@ -23,4 +25,12 @@ public interface PropuestaInterface {
     public PropuestaDTO obtenerPropuestaPorId(Integer id);
 
     public void modificarPropuesta(Integer id, PropuestaDTO propuestaDTO);
+
+    public List<PropuestaDTO> listarAsignadas(UsuarioEntity usuarioEntity);
+
+    public List<PropuestaDTO> listarPropuestasPuntajeDescendente();
+
+    public List<ConvocatoriaEntity> listarConvocatoriasPasadas();
+
+    public List<PropuestaDTO> listarInfoConvocatoriaPasada(Integer id);
 }

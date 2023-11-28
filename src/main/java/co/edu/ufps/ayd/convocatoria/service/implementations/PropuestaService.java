@@ -163,20 +163,12 @@ public class PropuestaService implements PropuestaInterface {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public PropuestaDTO obtenerPropuestaPorId(Integer id) {
         PropuestaEntity propuestaEntity = propuestaRepository.findById(id)
                 .orElseThrow(() -> new PropuestaException("Propuesta no encontrada con ID: " + id));
 
         return convertirAPropuestaDTO(propuestaEntity);
-    }
-
-    public PropuestaDTO convertirAPropuestaDTO(PropuestaEntity propuestaEntity) {
-        PropuestaDTO propuestaDTO = new PropuestaDTO();
-        BeanUtils.copyProperties(propuestaEntity, propuestaDTO);
-        propuestaDTO.setProponentes(propuestaEntity.getProponentes().stream()
-                .map(ProponentePropuestaEntity::getProponente)
-                .collect(Collectors.toList()));
-        return propuestaDTO;
     }
 
     @Override
@@ -197,7 +189,6 @@ public class PropuestaService implements PropuestaInterface {
         }
         List<ProponenteEntity> proponentesDTO = propuestaDTO.getProponentes();
 
-
         if (proponentesDTO != null) {
             for (ProponenteEntity proponenteDTO : proponentesDTO) {
                 ProponenteEntity proponenteExistente = proponenteRepository.findById(proponenteDTO.getId())
@@ -215,6 +206,129 @@ public class PropuestaService implements PropuestaInterface {
         }
 
         propuestaRepository.save(propuestaExistente);
+    }
+
+    @Override
+    public List<PropuestaDTO> listarAsignadas(UsuarioEntity usuarioEntity) {
+        List<PropuestaEntity> propuestasAsignadas = propuestaRepository.findByEvaluador(usuarioEntity);
+
+        if (propuestasAsignadas.isEmpty()) {
+            throw new PropuestaException("No hay propuestas asignadas al evaluador.");
+        }
+
+        return propuestasAsignadas.stream()
+                .map(propuesta -> {
+                    List<ProponentePropuestaEntity> proponentePropuestaEntities = proponentePropuestaRepository
+                            .findByPropuesta(propuesta);
+
+                    List<ProponenteEntity> proponentes = proponentePropuestaEntities.stream()
+                            .map(ProponentePropuestaEntity::getProponente)
+                            .collect(Collectors.toList());
+
+                    PropuestaDTO propuestaDTO = new PropuestaDTO();
+                    propuestaDTO.setId(propuesta.getId());
+                    propuestaDTO.setNombre(propuesta.getNombre());
+                    propuestaDTO.setConvocatoria(propuesta.getConvocatoria());
+                    propuestaDTO.setProponentes(proponentes);
+                    propuestaDTO.setPuntaje(propuesta.getPuntaje());
+                    propuestaDTO.setTipo(propuesta.getTipo());
+                    propuestaDTO.setMateria(propuesta.getMateria());
+                    propuestaDTO.setSemillero(propuesta.getSemillero());
+                    propuestaDTO.setProfesor(propuesta.getProfesor());
+                    propuestaDTO.setArchivo(propuesta.getArchivo());
+
+                    return propuestaDTO;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PropuestaDTO> listarPropuestasPuntajeDescendente() {
+        Optional<ConvocatoriaEntity> convocatoriaOptional = convocatoriaRepository.findByEstado(true);
+
+        if (convocatoriaOptional.isPresent()) {
+            List<PropuestaEntity> propuestasOrdenadas = propuestaRepository.findByConvocatoriaOrderByPuntajeDesc(convocatoriaOptional.get());
+            return propuestasOrdenadas.stream()
+                    .map(propuesta -> {
+                        List<ProponentePropuestaEntity> proponentePropuestaEntities = proponentePropuestaRepository
+                                .findByPropuesta(propuesta);
+
+                        List<ProponenteEntity> proponentes = proponentePropuestaEntities.stream()
+                                .map(ProponentePropuestaEntity::getProponente)
+                                .collect(Collectors.toList());
+
+                        PropuestaDTO propuestaDTO = new PropuestaDTO();
+                        propuestaDTO.setId(propuesta.getId());
+                        propuestaDTO.setNombre(propuesta.getNombre());
+                        propuestaDTO.setConvocatoria(propuesta.getConvocatoria());
+                        propuestaDTO.setProponentes(proponentes);
+                        propuestaDTO.setPuntaje(propuesta.getPuntaje());
+                        propuestaDTO.setTipo(propuesta.getTipo());
+                        propuestaDTO.setMateria(propuesta.getMateria());
+                        propuestaDTO.setSemillero(propuesta.getSemillero());
+                        propuestaDTO.setProfesor(propuesta.getProfesor());
+                        propuestaDTO.setArchivo(propuesta.getArchivo());
+
+                        return propuestaDTO;
+                    })
+                    .collect(Collectors.toList());
+        } else {
+            throw new PropuestaException("No hay una convocatoria habilitada.");
+        }
+
+    }
+
+    public PropuestaDTO convertirAPropuestaDTO(PropuestaEntity propuestaEntity) {
+        PropuestaDTO propuestaDTO = new PropuestaDTO();
+        BeanUtils.copyProperties(propuestaEntity, propuestaDTO);
+        propuestaDTO.setProponentes(propuestaEntity.getProponentes().stream()
+                .map(ProponentePropuestaEntity::getProponente)
+                .collect(Collectors.toList()));
+        return propuestaDTO;
+    }
+
+    @Override
+    public List<ConvocatoriaEntity> listarConvocatoriasPasadas() {
+        List<ConvocatoriaEntity> convocatoriasPasadas = convocatoriaRepository.findAllByEstado(false);
+        if(convocatoriasPasadas.isEmpty()){
+             throw new PropuestaException("No hay convocatorias pasadas.");
+        }
+        return convocatoriasPasadas;
+    }
+
+    @Override
+    public List<PropuestaDTO> listarInfoConvocatoriaPasada(Integer id) {
+        Optional<ConvocatoriaEntity> convocatoriaOptional = convocatoriaRepository.findById(id);
+
+        if (convocatoriaOptional.isPresent()) {
+            List<PropuestaEntity> propuestasOrdenadas = propuestaRepository.findByConvocatoriaOrderByPuntajeDesc(convocatoriaOptional.get());
+            return propuestasOrdenadas.stream()
+                    .map(propuesta -> {
+                        List<ProponentePropuestaEntity> proponentePropuestaEntities = proponentePropuestaRepository
+                                .findByPropuesta(propuesta);
+
+                        List<ProponenteEntity> proponentes = proponentePropuestaEntities.stream()
+                                .map(ProponentePropuestaEntity::getProponente)
+                                .collect(Collectors.toList());
+
+                        PropuestaDTO propuestaDTO = new PropuestaDTO();
+                        propuestaDTO.setId(propuesta.getId());
+                        propuestaDTO.setNombre(propuesta.getNombre());
+                        propuestaDTO.setConvocatoria(propuesta.getConvocatoria());
+                        propuestaDTO.setProponentes(proponentes);
+                        propuestaDTO.setPuntaje(propuesta.getPuntaje());
+                        propuestaDTO.setTipo(propuesta.getTipo());
+                        propuestaDTO.setMateria(propuesta.getMateria());
+                        propuestaDTO.setSemillero(propuesta.getSemillero());
+                        propuestaDTO.setProfesor(propuesta.getProfesor());
+                        propuestaDTO.setArchivo(propuesta.getArchivo());
+
+                        return propuestaDTO;
+                    })
+                    .collect(Collectors.toList());
+        } else {
+            throw new PropuestaException("No hay una convocatoria con el id:" + id);
+        }
     }
 
 }

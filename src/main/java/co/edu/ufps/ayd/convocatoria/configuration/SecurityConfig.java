@@ -56,7 +56,7 @@ public class SecurityConfig {
                                             "/usuario/inhabilitarEvaluador", "/propuesta/asignarEvaluador").hasAnyAuthority("ROL_ADMIN", "ROL_PROPONENTE", "ROL_EVALUADOR");
                     auth.requestMatchers("/materia/listarActivas", "/profesor/listarActivos", "/semillero/listarActivos", "/propuesta/guardarArchivo"
                                             ,"/propuesta/registrar", "/propuesta/buscarRegistradas").hasAuthority("ROL_PROPONENTE");
-                    auth.requestMatchers("/propuesta/calificarPropuestaAsignada").hasAuthority("ROL_EVALUADOR");
+                    auth.requestMatchers("/propuesta/calificarPropuestaAsignada", "/propuesta/listarAsignadas").hasAuthority("ROL_EVALUADOR");
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> {

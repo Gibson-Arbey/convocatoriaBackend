@@ -171,6 +171,37 @@ public class PropuestaController {
         return ResponseEntity.ok().body("Propuesta modificada exitosamente");
     }
 
+    @GetMapping("/listarAsignadas")
+    @PreAuthorize("hasAnyAuthority('ROL_ADMIN', 'ROL_EVALUADOR')")
+    public ResponseEntity<List<PropuestaDTO>> listarPropuestasAsignadas(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        UsuarioEntity usuarioEntity = usuarioService.buscarUsuarioEmail(username);
+        List<PropuestaDTO> propuestasAgrupadas = propuestaService.listarAsignadas(usuarioEntity);
+        return new ResponseEntity<>(propuestasAgrupadas, HttpStatus.OK);
+    }
+
+    @GetMapping("/listarOrdenadas")
+    @PreAuthorize("hasAuthority('ROL_ADMIN')")
+    public  ResponseEntity<List<PropuestaDTO>> listarPropuestasPuntajeDescendente(){
+        List<PropuestaDTO> propuestasOrdenadas = propuestaService.listarPropuestasPuntajeDescendente();
+        return new ResponseEntity<>(propuestasOrdenadas, HttpStatus.OK);
+    }
+
+    @GetMapping("/listarConvocatoriasPasadas")
+    @PreAuthorize("hasAuthority('ROL_ADMIN')")
+    public  ResponseEntity<List<ConvocatoriaEntity>> listarConvocatoriasPasadas(){
+        List<ConvocatoriaEntity> convocatoriasPasadas = propuestaService.listarConvocatoriasPasadas();
+        return new ResponseEntity<>(convocatoriasPasadas, HttpStatus.OK);
+    }
+
+    @GetMapping("/listarInfoConvocatoriaPasada")
+    @PreAuthorize("hasAuthority('ROL_ADMIN')")
+    public  ResponseEntity<List<PropuestaDTO>> listarInfoConvocatoriaPasada(@RequestParam("id") Integer id){
+        List<PropuestaDTO> convocatoriasPasadas = propuestaService.listarInfoConvocatoriaPasada(id);
+        return new ResponseEntity<>(convocatoriasPasadas, HttpStatus.OK);
+    }
+
     private PropuestaEntity convertirAModeloPropuesta(Map<?, ?> datoMap) {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.convertValue(datoMap, PropuestaEntity.class);

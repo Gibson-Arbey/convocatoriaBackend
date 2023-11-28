@@ -67,6 +67,7 @@ public class PropuestaEntity {
     /* *
      * Puntaje obtenido por la propuesta
      */
+    @Column(name = "puntaje")
     private Integer puntaje;
 
     /* *

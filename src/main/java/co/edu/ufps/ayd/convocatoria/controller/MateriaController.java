@@ -3,6 +3,7 @@ package co.edu.ufps.ayd.convocatoria.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -52,6 +53,16 @@ public class MateriaController {
         try {
             materiaService.agregarMateria(materiaEntity);
             return ResponseEntity.ok("Materia guardada exitosamente");
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @GetMapping("/obtenerInfo")
+    @PreAuthorize("hasAuthority('ROL_ADMIN')")
+    public ResponseEntity<MateriaEntity> obtenerInfo(@RequestParam("id") Integer id){
+        try {
+            return new ResponseEntity<>(materiaService.buscarMateria(id), HttpStatus.OK);
         } catch (Exception e) {
             throw e;
         }

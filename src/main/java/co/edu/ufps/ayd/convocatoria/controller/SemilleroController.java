@@ -3,6 +3,7 @@ package co.edu.ufps.ayd.convocatoria.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -51,6 +52,16 @@ public class SemilleroController {
         try {
             semilleroService.agregarSemillero(semilleroEntity);
             return ResponseEntity.ok("Semillero guardado exitosamente");
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @GetMapping("/obtenerInfo")
+    @PreAuthorize("hasAuthority('ROL_ADMIN')")
+    public ResponseEntity<SemilleroEntity> obtenerInfo(@RequestParam("id") Integer id){
+        try {
+            return new ResponseEntity<>(semilleroService.buscarSemillero(id), HttpStatus.OK);
         } catch (Exception e) {
             throw e;
         }
